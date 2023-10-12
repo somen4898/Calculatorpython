@@ -1,22 +1,33 @@
 import re
 
+
+def has_invalid_combinations(expression):
+    invalid_combinations = ['-+', '*+', '/+', '-/', '*/', '+/', '-*', '+*', '/*']
+    for combination in invalid_combinations:
+        if combination in expression:
+            return True
+    return False
+
+
 def clean_expression(expression):
     # Use regular expression to remove consecutive / and - operators
     cleaned_expression = re.sub(r'([/])\1+', r'\1', expression)
     cleaned_expression = re.sub(r'([-])\1+', r'\1', cleaned_expression)
     cleaned_expression = re.sub(r'([*])\1+', r'\1', cleaned_expression)
     cleaned_expression = re.sub(r'([+])\1+', r'\1', cleaned_expression)
+    while has_invalid_combinations(cleaned_expression):
+        cleaned_expression = re.sub(r'\*\+', '+', cleaned_expression)
+        cleaned_expression = re.sub(r'\/\+', '+', cleaned_expression)
+        cleaned_expression = re.sub(r'-\+', '+', cleaned_expression)
+        cleaned_expression = re.sub(r'\/\*', '*', cleaned_expression)
+        cleaned_expression = re.sub(r'\+\*', '*', cleaned_expression)
+        cleaned_expression = re.sub(r'\-\*', '*', cleaned_expression)
+        cleaned_expression = re.sub(r'\+\/', '/', cleaned_expression)
+        cleaned_expression = re.sub(r'\-\/', '/', cleaned_expression)
+        cleaned_expression = re.sub(r'\*\/', '/', cleaned_expression)
 
-    cleaned_expression = re.sub(r'([-+])\1+', '+', expression)
-    cleaned_expression = re.sub(r'([*+])\1+', '+', expression)
-    cleaned_expression = re.sub(r'([/+])\1+', '+', expression)
-    cleaned_expression = re.sub(r'([+*])\1+', '*', expression)
-    cleaned_expression = re.sub(r'([/*])\1+', '*', expression)
-    cleaned_expression = re.sub(r'([-*])\1+', '*', expression)
-    cleaned_expression = re.sub(r'([-/])\1+', '/', expression)
-    cleaned_expression = re.sub(r'([+/])\1+', '/', expression)
-    cleaned_expression = re.sub(r'([*/])\1+', '/', expression)
     return cleaned_expression
+
 
 def calculate(expression):
     try:
