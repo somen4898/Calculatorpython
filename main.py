@@ -27,7 +27,6 @@ def tokenize(exp):
     return [t for t in tokens if t != ""]
 
 
-
 def evaluate_parentheses(tokens):
     stack = []
     for i, token in enumerate(tokens):
